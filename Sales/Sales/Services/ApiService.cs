@@ -1,10 +1,10 @@
 ﻿namespace Sales.Services
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Newtonsoft.Json;
     using Common.Models;
 
     public class ApiService
@@ -23,7 +23,7 @@
                     return new Response
                     {
                         IsSuccess = false,
-                        message = answer,
+                        Message = answer,
                     };
                 }
 
@@ -31,16 +31,15 @@
                 return new Response
                 {
                     IsSuccess = true,
-                    message = list,
+                    Result = list,
                 };
-
             }
             catch (Exception ex)
             {
                 return new Response
                 {
                     IsSuccess = false,
-                    message = ex.Message,
+                    Message = ex.Message,
                 };
             }
         }
