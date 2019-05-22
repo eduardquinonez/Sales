@@ -27,7 +27,7 @@
 
         private async void LoadProducts()
         {
-            var response = await this.apiService.GetList<Product>("https://salesapiservice.azurewebsites.net", "/api", "/Products");
+            var response = await this.apiService.GetList<Product>("https://salesapides.azurewebsites.net", "/api", "/Products");
             if(!response.IsSuccess)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", response.Message, "Accept");
