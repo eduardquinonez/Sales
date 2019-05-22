@@ -7,7 +7,7 @@
         [Key]
         public int ProductId { get; set; }
 
-        [Required ]
+        [Required]
         public string Description { get; set; }
 
         public Decimal Price { get; set; }
