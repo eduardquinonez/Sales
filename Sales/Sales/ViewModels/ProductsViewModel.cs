@@ -1,7 +1,9 @@
 ﻿namespace Sales.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Windows.Input;
     using Common.Models;
     using GalaSoft.MvvmLight.Command;
@@ -15,12 +17,16 @@
         private ApiService apiService;
 
         private bool isRefreshing;
+
+        private ObservableCollection<ProductItemViewModel> products;
+
         #endregion
 
         #region Properties
-        private ObservableCollection<Product> products;
 
-        public ObservableCollection<Product> Products  //Lista de Productos
+        public List<Product> MyProducts { get; set; }
+
+        public ObservableCollection<ProductItemViewModel> Products  //Lista de Productos
         {
             get { return this.products; }
             set { this.SetValue(ref this.products, value); }
@@ -80,12 +86,31 @@
                 return;
             }
 
-            var list = (List<Product>)response.Result;
-            this.Products = new ObservableCollection<Product>(list);
+            this.MyProducts = (List<Product>)response.Result;
+            this.RefreshList();
             this.IsRefreshing = false;
         }
+
+        public void RefreshList()
+        {
+            // Cambiar List de la clase Product a la clase ProductItemViewModel
+            var myListProductItemViewModel = MyProducts.Select(p => new ProductItemViewModel
+            {
+                Description = p.Description,
+                ImageArray = p.ImageArray,
+                ImagePath = p.ImagePath,
+                IsAvailable = p.IsAvailable,
+                Price = p.Price,
+                ProductId = p.ProductId,
+                PublishOn = p.PublishOn,
+                Remarks = p.Remarks,
+            });
+
+            this.Products = new ObservableCollection<ProductItemViewModel>(
+                myListProductItemViewModel.OrderBy(p => p.Description));
+        }
         #endregion
-        
+
         #region Commands
         public ICommand RefreshCommand
         {

@@ -201,10 +201,11 @@
                 return;
             }
 
-            // Usar el response de producto
+            // Usar el response de producto para agregar el nuevo producto
             var newProduct = (Product)response.Result;
-            var viewModel = ProductsViewModel.GetInstance();
-            viewModel.Products.Add(newProduct);
+            var productsViewModel = ProductsViewModel.GetInstance();
+            productsViewModel.MyProducts.Add(newProduct);
+            productsViewModel.RefreshList();
 
             this.IsRunning = false;
             this.IsEnabled = true;
