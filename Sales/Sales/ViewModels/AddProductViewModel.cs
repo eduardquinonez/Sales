@@ -1,9 +1,12 @@
 ﻿namespace Sales.ViewModels
 {
+    using System;
     using System.Windows.Input;
     using Common.Models;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using Plugin.Media;
+    using Plugin.Media.Abstractions;
     using Services;
     using Xamarin.Forms;
 
@@ -11,6 +14,8 @@
     {
         #region Attributes
 
+        private MediaFile file; //Captura las fotos en memoria
+        private ImageSource imageSource;
         private ApiService apiService;
         private bool isRunning;
         private bool isEnabled;
@@ -36,6 +41,11 @@
             set { this.SetValue(ref this.isEnabled, value); }
         }
 
+        public ImageSource ImageSource
+        {
+            get { return this.imageSource; }
+            set { this.SetValue(ref this.imageSource, value); }
+        }
         #endregion
 
         #region Constructors
@@ -43,11 +53,64 @@
         {
             this.apiService = new ApiService();
             this.isEnabled = true;
-
+            this.ImageSource = "noproduct";
         }
         #endregion
 
         #region Commands
+
+        public ICommand ChangeImageCommand
+        {
+            get
+            {
+                return new RelayCommand(ChangeImage);
+            }
+        }
+        private async void ChangeImage()
+        {
+            //Inicializar la libreria de Fotos
+            await CrossMedia.Current.Initialize();
+
+            var source = await Application.Current.MainPage.DisplayActionSheet(
+                Languages.ImageSource,
+                Languages.Cancel,
+                null,
+                Languages.FromGallery,
+                Languages.NewPicture);
+
+            if (source == Languages.Cancel)
+            {
+                // No Hay Foto
+                this.file = null;
+                return;
+            }
+
+            if (source == Languages.NewPicture)
+            {
+                this.file = await CrossMedia.Current.TakePhotoAsync(
+                    new StoreCameraMediaOptions
+                    {
+                        Directory = "Sample",
+                        Name = "test.jpg",
+                        PhotoSize = PhotoSize.Small,
+                    }
+                );
+            }
+            else
+            {
+                this.file = await CrossMedia.Current.PickPhotoAsync();
+            }
+
+            if (this.file != null)
+            {
+                this.ImageSource = ImageSource.FromStream(() =>
+                {
+                    var stream = this.file.GetStream();
+                    return stream;
+                });
+            }
+        }
+
         public ICommand SaveCommand
         {
             get
@@ -87,21 +150,28 @@
             }
 
             // Deshabilitar Activity Indicator y el Botón Save
-            this.isRunning = true;
-            this.isEnabled = false;
+            this.IsRunning = true;
+            this.IsEnabled = false;
 
             // Validar conexión a internet en el celular
             var connection = await this.apiService.CheckConnection();
             if (!connection.IsSuccess)
             {
                 // Deshabilitar Activity Indicator y el Botón Save
-                this.isRunning = false;
-                this.isEnabled = true;
+                this.IsRunning = false;
+                this.IsEnabled = true;
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error, 
                     connection.Message, 
                     Languages.Accept);
                 return;
+            }
+
+            //Validar si el usuario escogió foto
+            byte[] imageArray = null;
+            if (this.file != null)
+            {
+                imageArray = FileHelper.Readfully(this.file.GetStream());
             }
 
             //Armar el objeto producto a enviar al API
@@ -110,6 +180,7 @@
                 Description = this.Description,
                 Price = price,
                 Remarks = this.Remarks,
+                ImageArray = imageArray,
             };
 
             //Conectarse al servicio API
@@ -121,8 +192,8 @@
             //Validar si lo grabó...
             if (!response.IsSuccess)
             {
-                this.isRunning = false;
-                this.isEnabled = true;
+                this.IsRunning = false;
+                this.IsEnabled = true;
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
                     response.Message,
@@ -135,8 +206,8 @@
             var viewModel = ProductsViewModel.GetInstance();
             viewModel.Products.Add(newProduct);
 
-            this.isRunning = false;
-            this.isEnabled = true;
+            this.IsRunning = false;
+            this.IsEnabled = true;
             await Application.Current.MainPage.Navigation.PopAsync();
 
         }
