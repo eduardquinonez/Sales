@@ -1,5 +1,6 @@
 ﻿namespace Sales.ViewModels
 {
+    using System;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Views;
@@ -8,6 +9,9 @@
     public class MainViewModel
     {
         #region Properties
+
+        public LoginViewModel Login { get; set; }
+
         public EditProductViewModel EditProduct { get; set; }
 
         public ProductsViewModel Products { get; set; }
@@ -20,7 +24,8 @@
         public MainViewModel()
         {
             instance = this;
-            this.Products = new ProductsViewModel();
+            // Este llamada existía cuando se ingresaba por la página Products
+            //this.Products = new ProductsViewModel();
         }
         #endregion
         
