@@ -1,13 +1,12 @@
 ﻿namespace Sales.ViewModels
 {
-    using System;
-    using System.Windows.Input;
     using Common.Models;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
     using Plugin.Media;
     using Plugin.Media.Abstractions;
     using Services;
+    using System.Windows.Input;
     using Xamarin.Forms;
 
     public class AddProductViewModel : BaseViewModel
