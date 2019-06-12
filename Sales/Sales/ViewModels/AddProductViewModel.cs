@@ -170,7 +170,7 @@
             byte[] imageArray = null;
             if (this.file != null)
             {
-                imageArray = FileHelper.Readfully(this.file.GetStream());
+                imageArray = FilesHelper.ReadFully(this.file.GetStream());
             }
 
             //Armar el objeto producto a enviar al API

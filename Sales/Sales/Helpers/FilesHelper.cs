@@ -2,9 +2,9 @@
 {
     using System.IO;
 
-    public class FileHelper
+    public class FilesHelper
     {
-        public static byte[] Readfully(Stream input)
+        public static byte[] ReadFully(Stream input)
         {
             using (MemoryStream ms = new MemoryStream())
             {

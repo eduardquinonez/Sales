@@ -5,9 +5,11 @@ using Xamarin.Forms.Xaml;
 
 namespace Sales
 {
+    using Common.Models;
     using Helpers;
-    using Views;
+    using Newtonsoft.Json;
     using ViewModels;
+    using Views;
 
     public partial class App : Application
     {
@@ -17,16 +19,18 @@ namespace Sales
         {
             InitializeComponent();
 
+            var mainViewModel = MainViewModel.GetInstance();
+
             // Validar si el usuario ya esta logueado y tienen token, si tiene va a la página principal de la app
-            if (Settings.IsRemembered && !string.IsNullOrEmpty(Settings.AccessToken))
+            if (Settings.IsRemembered)
             {
-                MainViewModel.GetInstance().Products = new ProductsViewModel();
-                MainPage = new MasterPage();
-            }
-            else
-            {
-                MainViewModel.GetInstance().Login = new LoginViewModel();
-                MainPage = new NavigationPage(new LoginPage());
+                if (!string.IsNullOrEmpty(Settings.UserASP))
+                {
+                    mainViewModel.UserASP = JsonConvert.DeserializeObject<MyUserASP>(Settings.UserASP);
+                }
+
+                mainViewModel.Products = new ProductsViewModel();
+                this.MainPage = new MasterPage();
             }
         }
 

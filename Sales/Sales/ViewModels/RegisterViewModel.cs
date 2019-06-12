@@ -2,10 +2,10 @@
 {
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
+    using Common.Models;
     using Helpers;
     using Plugin.Media;
     using Plugin.Media.Abstractions;
-    using Sales.Common.Models;
     using Services;
     using Xamarin.Forms;
 
