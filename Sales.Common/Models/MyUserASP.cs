@@ -26,7 +26,7 @@
 
         public List<Claim> Claims { get; set; }
 
-        public string id { get; set; }
+        public string Id { get; set; }
 
         public string UserName { get; set; }
     }

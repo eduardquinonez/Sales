@@ -32,6 +32,11 @@ namespace Sales
                 mainViewModel.Products = new ProductsViewModel();
                 this.MainPage = new MasterPage();
             }
+            else
+            {
+                mainViewModel.Login = new LoginViewModel();
+                this.MainPage = new NavigationPage(new LoginPage());
+            }
         }
 
         protected override void OnStart()
