@@ -9,8 +9,8 @@
     using Plugin.Permissions;
 
     [Activity(
-        Label = "Sales", 
-        Icon = "@mipmap/icon", 
+        Label = "Sales",
+        Icon = "@drawable/ic_launcher",
         Theme = "@style/MainTheme", 
         MainLauncher = true, 
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
