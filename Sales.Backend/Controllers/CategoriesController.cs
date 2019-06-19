@@ -14,6 +14,7 @@
     {
         private LocalDataContext db = new LocalDataContext();
 
+        // GET: Categories
         public async Task<ActionResult> Index()
         {
             return View(await this.db.Categories.OrderBy(c => c.Description).ToListAsync());
