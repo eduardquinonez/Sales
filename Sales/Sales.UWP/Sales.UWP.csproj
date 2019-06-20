@@ -164,9 +164,12 @@
     <PackageReference Include="Xamarin.Auth">
       <Version>1.6.0.4</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.497661" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
     <PackageReference Include="Xamarin.Essentials" Version="1.0.1" />
+    <PackageReference Include="Xamarin.Forms.Maps">
+      <Version>4.0.0.497661</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sales\Sales.csproj">
