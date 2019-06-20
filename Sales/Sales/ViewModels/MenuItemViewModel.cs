@@ -40,7 +40,7 @@
             }
             else if ( this.PageName == "AboutPage")
             {
-                App.Master.IsPresented = true;
+                App.Master.IsPresented = false;
                 App.Navigator.PushAsync(new MapPage());
             }
         }
