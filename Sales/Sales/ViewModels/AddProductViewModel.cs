@@ -1,5 +1,6 @@
 ﻿namespace Sales.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
@@ -8,6 +9,8 @@
     using Common.Models;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using Plugin.Geolocator;
+    using Plugin.Geolocator.Abstractions;
     using Plugin.Media;
     using Plugin.Media.Abstractions;
     using Services;
@@ -250,6 +253,9 @@
                 imageArray = FilesHelper.ReadFully(this.file.GetStream());
             }
 
+            // Guardar la localización del producto
+            var location = await this.GetLocation();
+
             //Armar el objeto producto a enviar al API
             var product = new Product
             {
@@ -259,6 +265,8 @@
                 ImageArray = imageArray,
                 CategoryId = this.Category.CategoryId,
                 UserId = MainViewModel.GetInstance().UserASP.Id,
+                Latitude = location == null ? 0 : location.Latitude,
+                Longitude = location == null ? 0 : location.Longitude,
             };
 
             //Conectarse al servicio API
@@ -290,6 +298,15 @@
             await App.Navigator.PopAsync();
 
         }
+
+        private async Task<Position> GetLocation()
+        {
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50;
+            var location = await locator.GetPositionAsync();
+            return location;
+        }
+
         #endregion
 
     }
