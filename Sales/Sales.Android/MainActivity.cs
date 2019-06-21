@@ -16,8 +16,25 @@
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        #region Singleton
+        private static MainActivity instance;
+
+        public static MainActivity GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new MainActivity();
+            }
+
+            return instance;
+        }
+        #endregion
+
+        #region Methods
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            instance = this;
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
@@ -30,16 +47,6 @@
             LoadApplication(new App());
         }
 
-        //public override void OnRequestPermissionsResult(
-        //    int requestCode, 
-        //    string[] permissions, 
-        //    [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        //{
-        //    Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        //    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        //}
-
         // Librería para iniciar a utilizar XAM PLUGIN MEDIA
         public override void OnRequestPermissionsResult(
             int requestCode,
@@ -51,5 +58,6 @@
                 permissions, 
                 grantResults);
         }
+        #endregion
     }
 }
