@@ -9,7 +9,6 @@
     {
         [Key]
         public int ProductId { get; set; }
-
         public int CategoryId { get; set; }
 
         [Required]
@@ -23,7 +22,6 @@
         [Required]
         [StringLength(50)]
         public string Description { get; set; }
-
 
         [DataType(DataType.MultilineText)]
         public string Remarks { get; set; }
